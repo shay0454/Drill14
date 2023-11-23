@@ -1,7 +1,7 @@
 import math
 
 from pico2d import get_time, load_image, load_font, clamp, SDL_KEYDOWN, SDL_KEYUP, SDLK_SPACE, SDLK_LEFT, SDLK_RIGHT, \
-    SDLK_UP, SDLK_DOWN,get_canvas_width,get_canvas_height \
+    SDLK_UP, SDLK_DOWN,get_canvas_width,get_canvas_height,draw_rectangle \
 
 
 from ball import Ball
@@ -285,17 +285,19 @@ class Boy:
         self.state_machine.update()
         self.x=clamp(50,self.x,server.background.w-50)
         self.y=clamp(50,self.y,server.background.h-50)
+        self.sx=self.x-server.background.window_left
+        self.sy=self.y-server.background.window_bottom
 
     def handle_event(self, event):
         self.state_machine.handle_event(('INPUT', event))
 
     def draw(self):
         # fill here
-        #sx,sy=get_canvas_width()//2,get_canvas_height()//2
-        sx=self.x-server.background.window_left
-        sy=self.y-server.background.window_bottom
+        #self.sx,self.sy=get_canvas_width()//2,get_canvas_height()//2
+
         #소년을 화면 한가운데 그림
-        self.image.clip_draw(int(self.frame)*100,self.action*100,100,100,sx,sy)
+        self.image.clip_draw(int(self.frame)*100,self.action*100,100,100,self.sx,self.sy)
+        draw_rectangle(self.sx-20,self.sy-50,self.sx+20,self.sy+50)
         pass
 
     def get_bb(self):
@@ -303,4 +305,5 @@ class Boy:
 
     # fill here
     def handle_collision(self, group, other):
-        pass
+        if group=='boy:ball':
+            pass
